@@ -10,7 +10,7 @@ class Condition(Enum):
     MP = "MP"
     HP = "HP"
     D = "D"
-    UK = "Unknown"
+    UK = "UK"
     UNDEFINED = "Undefined"
 
 
@@ -54,7 +54,7 @@ def mapEdition(inputEdition, editions):
             return editionMapping[1]
 
     raise ValueError("Attempted to map unknown edition: \"" +
-                     inputEdition + "\", known editions: \n" + "\n".join(rowList))
+                     inputEdition + "\"")
 
 
 def readCollection(inputFile="input.csv", outputFile="output.csv"):
@@ -80,29 +80,19 @@ def readCollection(inputFile="input.csv", outputFile="output.csv"):
                     newRow[1] = getProperty(row, 'Count', headers)
                     newRow[2] = mapCondition(getProperty(
                         row, 'Condition', headers)).value
-
-                    # TODO: Map from deckbox.org edition to acronym edition
                     newRow[3] = mapEdition(getProperty(
                         row, 'Edition', headers), editionsMap)
                     newRow[4] = 1 if getProperty(
                         row, 'Foil', headers) == "foil" else 0
                     newRow[5] = getProperty(row, "Language", headers)
                     newRow[6] = None
-
-                    # TODO: Investigate if mapping is needed on time
                     newRow[7] = getProperty(row, 'Last Updated', headers)
                     newRow[8] = getProperty(row, 'Tradelist Count', headers)
                     newRow[9] = None
                     fileWriter.writerow(newRow)
 
-
-@dataclass
-class Arguments:
-    inputFile: str = "input.csv"
-    outputFile: str = "output.csv"
-
-
-args = Arguments()
+inputFile = "input.csv"
+outputFile = "output.csv"
 index = 0
 for arg in sys.argv:
     if (arg == "" or index == 0):
@@ -111,13 +101,20 @@ for arg in sys.argv:
     if (arg.find('=') > -1):
         splitArg = arg.split('=')
         if (splitArg[0] == "inputFile"):
-            args.inputFile = splitArg[1]
+            inputFile = splitArg[1]
         elif (splitArg[0] == "outputFile"):
-            args.outputFile = splitArg[1]
+            outputFile = splitArg[1]
     elif (index == 1):
-        args.inputFile = arg
+        inputFile = arg
     elif (index == 2):
-        args.outputFile = arg
+        outputFile = arg
     index += 1
+if len(sys.argv) == 1:
+    inputFile = input("Please type the name of the csv file to import: ")
+    outputFile = input("Please type the name of the csv file to export to: ")
 
-readCollection(args.inputFile, args.outputFile)
+print("Reading collection from file \"" + inputFile + "\", writing collection to file \"" + outputFile + "\"")
+try: 
+    readCollection(inputFile, outputFile)
+except FileNotFoundError as error:
+    print(str(error).split(']')[1][1:]) # Remove the [Errno 2] part of the error message
