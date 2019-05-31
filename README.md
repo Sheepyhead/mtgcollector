@@ -8,7 +8,7 @@ Quantity: The amount of cards of the same name from the same set at the same con
 
 Condition: NM (Near Mint), LP (Light Played), MP (Medium Played), HP (Heavy Played), D (Damaged) or UK (Unknown)
 
-Set: The three-letter set acronym
+Set: The three-letter set acronym, or asterisk (*) followed by a descriptive name if outside of normal 3-letter acronym sets
 
 Foil: Boolean, true if foiled, default false
 

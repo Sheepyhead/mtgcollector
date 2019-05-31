@@ -70,6 +70,7 @@ def readCollection(inputFile="input.csv", outputFile="output.csv"):
                 fileWriter.writerow(targetHeaders)
                 editionsReader = csv.reader(editionsFile, delimiter='=')
                 editionsMap = []
+                editionErrors = []
                 for edition in editionsReader:
                     editionsMap.append(edition)
                 for row in collectionReader:
@@ -80,8 +81,13 @@ def readCollection(inputFile="input.csv", outputFile="output.csv"):
                     newRow[1] = getProperty(row, 'Count', headers)
                     newRow[2] = mapCondition(getProperty(
                         row, 'Condition', headers)).value
-                    newRow[3] = mapEdition(getProperty(
+                    try:
+                        newRow[3] = mapEdition(getProperty(
                         row, 'Edition', headers), editionsMap)
+                    except ValueError as error:
+                        if str(error) not in editionErrors:
+                            editionErrors.append(str(error))
+                        continue
                     newRow[4] = 1 if getProperty(
                         row, 'Foil', headers) == "foil" else 0
                     newRow[5] = getProperty(row, "Language", headers)
@@ -90,6 +96,8 @@ def readCollection(inputFile="input.csv", outputFile="output.csv"):
                     newRow[8] = getProperty(row, 'Tradelist Count', headers)
                     newRow[9] = None
                     fileWriter.writerow(newRow)
+                editionErrors.sort()
+                print("\n".join(editionErrors))
 
 inputFile = "input.csv"
 outputFile = "output.csv"
