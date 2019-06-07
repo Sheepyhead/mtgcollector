@@ -1,6 +1,6 @@
 The intended format of card collection is the following:
 
-| Card Name | Quantity | Condition | Set | Foil | Language | Price | Last Changed | Tradelist Quantity | Notes
+| Card Name | Quantity | Condition | Set | Foil | Language | Price | Last Changed | Tradelist Quantity | Rarity | Notes
 
 Card name: The full name of the card as written on the card (or on gatherer if misprint)
 
@@ -19,5 +19,7 @@ Price: Optional, price of the card
 Last Changed: The last time this row's data was modified, not including Price or Tradelist Quantity
 
 Tradelist Quantity: The amount of cards willing to trade/sell
+
+Rarity: Common, Uncommon, Rare, MythicRare, BasicLand, Special
 
 Notes: Optional, Additional comments on card such as whether it's signed
